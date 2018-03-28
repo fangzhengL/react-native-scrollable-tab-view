@@ -36,24 +36,24 @@ const DefaultTabBar = createReactClass({
   },
 
   renderTab(name, page, isTabActive, onPressHandler) {
-    const { activeTextColor, inactiveTextColor, textStyle, } = this.props;
+    const { activeTextColor, inactiveTextColor, textStyle, tabsSyles } = this.props;
     const textColor = isTabActive ? activeTextColor : inactiveTextColor;
     const fontWeight = isTabActive ? 'bold' : 'normal';
-
+    const titleStyle = tabsSyles ? tabsSyles[page] : {}
     return <Button
-      style={{flex: 1, }}
-      key={name}
-      accessible={true}
-      accessibilityLabel={name}
-      accessibilityTraits='button'
-      onPress={() => onPressHandler(page)}
-    >
-      <View style={[styles.tab, this.props.tabStyle, ]}>
-        <Text style={[{color: textColor, fontWeight, }, textStyle, ]}>
-          {name}
-        </Text>
-      </View>
-    </Button>;
+       style={{flex: 1, ...titleStyle}}
+       key={name}
+       accessible={true}
+       accessibilityLabel={name}
+       accessibilityTraits='button'
+       onPress={() => onPressHandler(page)}
+     >
+       <View style={[styles.tab, this.props.tabStyle, ]}>
+         <Text style={[{color: textColor, fontWeight, }, textStyle, ]}>
+           {name}
+         </Text>
+       </View>
+     </Button>;
   },
 
   render() {
@@ -61,7 +61,7 @@ const DefaultTabBar = createReactClass({
     const numberOfTabs = this.props.tabs.length;
     const tabUnderlineStyle = {
       position: 'absolute',
-      width: containerWidth / numberOfTabs,
+      width:  containerWidth / numberOfTabs,
       height: 4,
       backgroundColor: 'navy',
       bottom: 0,
@@ -69,7 +69,7 @@ const DefaultTabBar = createReactClass({
 
     const translateX = this.props.scrollValue.interpolate({
       inputRange: [0, 1],
-      outputRange: [0,  containerWidth / numberOfTabs],
+      outputRange: [0,  this.props.outputRange ? this.props.outputRange : containerWidth / numberOfTabs],
     });
     return (
       <View style={[styles.tabs, {backgroundColor: this.props.backgroundColor, }, this.props.style, ]}>
